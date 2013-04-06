@@ -1,0 +1,164 @@
+import msvcrt
+import os
+ 
+def main():
+ 
+        player = 'x'
+        enemy = 'o'
+ 
+        gameBoard = {
+        1: [' ',' ',' ',' ',' ',' ',' ',' '],   #8x8
+        2: [' ',' ',' ',' ','o',' ',' ',' '],
+        3: [' ',' ',' ',' ','o',' ',' ',' '],
+        4: [' ',' ',' ',' ',' ',' ',' ',' '],
+        5: [' ',' ','o','o',' ',' ',' ',' '],
+        6: [' ',' ','o',' ',' ',' ',' ',' '],
+        7: [' ',' ',' ',' ',' ',' ',' ',' '],
+        8: [' ',' ',' ',' ',' ',' ',' ',' ']
+        }
+ 
+        #spawn player
+        gameBoard[1][0] = player
+ 
+        while True:
+ 
+                displayBoard(gameBoard)
+ 
+                getPlayerPos(gameBoard, player)
+               
+                #print x, y coordinates
+                print 'x: ' + str(playerPos[0]) + ' y: ' + str(playerPos[1]+1)
+               
+                try:
+                        print msg
+                except:
+                        pass
+               
+                key = msvcrt.getch()
+               
+                if key == 'q':
+                        quit()
+ 
+                elif key == 'd':
+                        if isEnemy(gameBoard, playerPos, 'R', enemy) == True:
+                                pass
+                        else:
+                                move(playerPos, gameBoard, player,'R')
+                               
+                elif key == 'a':
+                                if isEnemy(gameBoard, playerPos, 'L', enemy) == True:
+                                        pass
+                                else:
+                                        move(playerPos, gameBoard, player,'L')
+                                       
+                elif key == 's':
+                        if isEnemy(gameBoard, playerPos, 'D', enemy) == True:
+                                pass
+                        else:
+                                move(playerPos, gameBoard, player,'D')
+                               
+                elif key == 'w':
+                        if isEnemy(gameBoard, playerPos, 'U', enemy) == True:
+                                pass
+                        else:
+                                move(playerPos, gameBoard, player,'U')
+ 
+ 
+ 
+ 
+def move(playerPos, gameBoard, player, direction):
+       
+        direction = direction.upper()
+       
+        if direction == 'R':
+                if playerPos[1] == 7:
+                        pass
+                else:
+                        removeTrail(gameBoard, playerPos)
+                        playerPos[1] += 1
+                        placePlayer(gameBoard, playerPos, player)
+        elif direction == 'L':
+                if playerPos[1] == 0:
+                        pass
+                else:
+                        removeTrail(gameBoard, playerPos)
+                        playerPos[1] -= 1
+                        placePlayer(gameBoard, playerPos, player)
+       
+        elif direction == 'U':
+                if playerPos[0] == 1:
+                        pass
+                else:
+                        removeTrail(gameBoard, playerPos)
+                        playerPos[0] -= 1
+                        placePlayer(gameBoard, playerPos, player)
+       
+        elif direction == 'D':
+                if playerPos[0] == 8:
+                        pass
+                else:
+                        removeTrail(gameBoard, playerPos)
+                        playerPos[0] += 1
+                        placePlayer(gameBoard, playerPos, player)
+                       
+        else:
+                pass
+ 
+def removeTrail(gameBoard, playerPos):
+        gameBoard[playerPos[0]][playerPos[1]] = ' '
+ 
+def placePlayer(gameBoard, playerPos, player):
+        gameBoard[playerPos[0]][playerPos[1]] = player
+ 
+def displayBoard(gameBoard):
+        os.system('cls')
+        print '+' + '-' * 8 + '+'
+        print '|' + "".join(gameBoard[1]) + '|'
+        print '|' + "".join(gameBoard[2]) + '|'
+        print '|' + "".join(gameBoard[3]) + '|'
+        print '|' + "".join(gameBoard[4]) + '|'
+        print '|' + "".join(gameBoard[5]) + '|'
+        print '|' + "".join(gameBoard[6]) + '|'
+        print '|' + "".join(gameBoard[7]) + '|'
+        print '|' + "".join(gameBoard[8]) + '|'
+        print '+' + '-' * 8 + '+'
+ 
+def getPlayerPos(gameBoard, player):
+        global playerPos
+        currentLine = 1
+        for line in gameBoard:
+                if player in gameBoard[line]:
+                        playerPos = [currentLine, gameBoard[line].index(player)]
+                        break
+                else:
+                        currentLine += 1
+ 
+def isEnemy(gameBoard, playerPos, direction, enemy):
+ 
+        global msg
+       
+        try:
+                if direction.upper() == 'L':
+                        movingDirection = gameBoard[playerPos[0]][playerPos[1]-1]
+                       
+                elif direction.upper() == 'R':
+                        movingDirection = gameBoard[playerPos[0]][playerPos[1]+1]
+               
+                elif direction.upper() == 'D':
+                        movingDirection = gameBoard[playerPos[0]+1][playerPos[1]]
+                       
+                elif direction.upper() == 'U':
+                        movingDirection = gameBoard[playerPos[0]-1][playerPos[1]]
+               
+                if movingDirection == enemy:
+                        msg = 'an enemy is blocking the way'
+                        return True
+                else:
+                        msg = ''
+                        return False
+        except:
+                        msg = ''
+                        return False
+       
+if __name__ == '__main__':
+        main()
